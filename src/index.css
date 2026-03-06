@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-primary: #6366f1; /* Indigo/Blue */
+  --color-brand-secondary: #a855f7; /* Purple */
+  --color-brand-bg: #050505;
+  --color-brand-card: #0f172a; /* Dark Blue Slate */
+  --color-brand-border: #1e293b;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-white font-sans antialiased;
+  }
+}
+
+.glass-card {
+  @apply bg-brand-card/50 backdrop-blur-sm border border-brand-border rounded-xl overflow-hidden;
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.trading-grid {
+  background-image: radial-gradient(circle at 1px 1px, #1e293b 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-r from-brand-primary to-brand-secondary;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-fast {
+  animation: marquee 50s linear infinite;
+}
+
+.animate-marquee-reverse-fast {
+  animation: marquee-reverse 50s linear infinite;
+}
+
+.animate-marquee-slow {
+  animation: marquee 80s linear infinite;
+}
+
+.animate-marquee-reverse-slow {
+  animation: marquee-reverse 80s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-slow:hover,
+.animate-marquee-fast:hover,
+.animate-marquee-reverse-fast:hover,
+.animate-marquee-reverse-slow:hover {
+  animation-play-state: paused;
+}
+
+/* Phone Input Custom Styling */
+.react-tel-input .form-control {
+  font-family: inherit !important;
+  font-size: 1.25rem !important;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Disable marquee on touch devices to allow manual swiping */
+@media (hover: none) {
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-marquee-fast,
+  .animate-marquee-reverse-fast,
+  .animate-marquee-reverse-slow {
+    animation: none !important;
+  }
+  
+  .touch-scroll {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .touch-scroll-item {
+    scroll-snap-align: center;
+  }
+}
+
+.react-tel-input .flag-dropdown {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.3) !important;
+  border-radius: 0 !important;
+}
+
+.react-tel-input .flag-dropdown:hover, 
+.react-tel-input .flag-dropdown.open {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.react-tel-input .country-list {
+  background-color: #0f172a !important;
+  color: white !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 8px !important;
+  margin-top: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.react-tel-input .country-list .country:hover {
+  background-color: #1e293b !important;
+}
+
+.react-tel-input .country-list .country.highlight {
+  background-color: #6366f1 !important;
+  color: white !important;
+}
+
+.react-tel-input .country-list .search {
+  background-color: #050505 !important;
+  color: white !important;
+  border: 1px solid #1e293b !important;
+  margin: 8px !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
+}
+
+.react-tel-input .country-list .search-box {
+  background-color: transparent !important;
+  color: white !important;
+  border: none !important;
+}
+
+.react-tel-input .selected-flag .arrow {
+  border-top-color: #6366f1 !important;
+}
+
+.react-tel-input .selected-flag .arrow.up {
+  border-bottom-color: #6366f1 !important;
+}
