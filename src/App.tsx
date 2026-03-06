@@ -346,7 +346,7 @@ const SOCIAL_LINKS = [
   { name: 'Instagram', icon: <Instagram />, url: 'https://www.instagram.com/branwillstorm', color: 'hover:text-pink-500' },
   { name: 'YouTube', icon: <Youtube />, url: 'https://www.youtube.com/branwillstorm', color: 'hover:text-red-600' },
   { name: 'Kick', icon: <KickIcon />, url: 'https://www.kick.com/branwillstorm', color: 'hover:text-[#53FC18]' },
-  { name: 'Telegram', icon: <TelegramIcon />, url: 'https://t.me/branwillstorm', color: 'hover:text-blue-400' },
+  { name: 'Telegram', icon: <TelegramIcon />, url: 'https://t.me/stormtradinggroup', color: 'hover:text-blue-400' },
   { name: 'Discord', icon: <DiscordIcon />, url: 'https://whop.com/branwillstorm/branwillstorm/', color: 'hover:text-indigo-500' },
   { name: 'WhatsApp', icon: <MessageCircle />, url: 'https://api.whatsapp.com/send?phone=27614471418', color: 'hover:text-green-500' },
 ];
@@ -397,11 +397,14 @@ const Hero = () => (
             5+ YEARS MARKET EXPERIENCE
           </div>
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-4">
-            MASTER THE <br />
-            <span className="gradient-text uppercase">Markets</span> <br />
+            LEARN HOW TO <br />
+            <span className="gradient-text uppercase">TRADE</span> <br />
             <span className="text-2xl md:text-4xl uppercase tracking-[0.2em] text-white/80">
               With <span className="gradient-text">Branwill Storm</span>
             </span>
+            <div className="text-xl md:text-2xl uppercase tracking-[0.3em] text-white/40 mt-4">
+              Understand the Markets
+            </div>
           </h1>
           <div className="mb-8 max-w-lg">
             <h2 className="text-xl md:text-2xl font-bold text-brand-primary mb-2">Shorten your learning curve</h2>
@@ -429,6 +432,49 @@ const Hero = () => (
               Book 1-on-1 Call
             </a>
           </div>
+
+          {/* Webinar Feature CTA */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 relative group"
+          >
+            <a 
+              href="https://stormtradinggroup.netlify.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block relative overflow-hidden rounded-2xl border border-brand-primary/30 bg-black/40 backdrop-blur-xl group-hover:border-brand-primary transition-all duration-500 shadow-2xl shadow-brand-primary/5"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="flex flex-col sm:flex-row items-center gap-6 p-6">
+                <div className="relative w-full sm:w-40 h-28 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+                  <img 
+                    src="https://picsum.photos/seed/trading-live/400/300" 
+                    alt="Live Webinar" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="bg-brand-primary/90 text-white p-2 rounded-full animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+                      <Tv size={18} />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-grow text-center sm:text-left">
+                  <div className="inline-flex items-center gap-2 text-[9px] font-mono text-brand-primary uppercase tracking-[0.3em] mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                    Live Webinar Training
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-brand-primary transition-colors">Master the Markets Live</h3>
+                  <p className="text-white/50 text-[10px] mb-4 max-w-xs leading-relaxed">Join our next live session and learn the exact rules-based strategies we use to fund traders.</p>
+                  <div className="inline-flex items-center gap-2 bg-brand-primary text-black px-5 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest group-hover:bg-white transition-all shadow-lg">
+                    Get Access <ArrowRight size={10} />
+                  </div>
+                </div>
+              </div>
+            </a>
+          </motion.div>
         </motion.div>
         
         <motion.div 
@@ -654,50 +700,133 @@ const Products = () => (
   </section>
 );
 
-const CertificateGallery = () => {
+const CertificateGallery = ({ items, interval = 3000 }: { items: typeof CERTIFICATES, interval?: number }) => {
   const [selectedCert, setSelectedCert] = useState<typeof CERTIFICATES[0] | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+
+  // Auto-cycle every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % items.length);
+    }, interval);
+    return () => clearInterval(timer);
+  }, [items.length, interval]);
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {CERTIFICATES.map((cert) => (
-          <motion.div
-            key={cert.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05, y: -10, rotate: 1 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setSelectedCert(cert)}
-            className="glass-card p-0 aspect-[1.4/1] shadow-2xl overflow-hidden group/cert border-2 border-brand-primary/20 cursor-pointer relative"
-          >
-            <div className="w-full h-full relative bg-zinc-900">
-              <img 
-                src={cert.imageUrl} 
-                alt="Certificate" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover/cert:scale-110"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${cert.id}/800/600`;
-                }}
-              />
+      <div className="relative w-full py-4 md:py-8 flex flex-col items-center overflow-hidden select-none">
+        {/* 3D Stage Container */}
+        <div className="relative w-full max-w-5xl h-[280px] md:h-[420px] flex items-center justify-center [perspective:2000px]">
+          <AnimatePresence mode="popLayout">
+            {items.map((cert, i) => {
+              // Calculate relative position to active index
+              let diff = i - activeIndex;
               
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover/cert:opacity-100 transition-opacity duration-500 flex items-end p-8">
-                <div className="flex flex-col transform translate-y-4 group-hover/cert:translate-y-0 transition-transform duration-500">
-                  <div className="h-1 w-12 bg-brand-primary mt-4 rounded-full"></div>
-                </div>
-              </div>
+              // Handle circular wrapping
+              if (diff > items.length / 2) diff -= items.length;
+              if (diff < -items.length / 2) diff += items.length;
 
-              <div className="absolute top-6 right-6 p-3 bg-brand-primary/20 backdrop-blur-xl rounded-full border border-brand-primary/40 text-brand-primary shadow-2xl transform group-hover/cert:rotate-12 transition-transform duration-500">
-                <ShieldCheck size={24} />
-              </div>
+              const isActive = i === activeIndex;
+              const isVisible = Math.abs(diff) <= 2; // Show 5 cards
 
-              {/* Shine effect on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover/cert:opacity-20 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white to-transparent -translate-x-full group-hover/cert:translate-x-full transform skew-x-12"></div>
-            </div>
-          </motion.div>
-        ))}
+              if (!isVisible) return null;
+
+              return (
+                <motion.div
+                  key={cert.id}
+                  initial={{ opacity: 0, scale: 0.8, z: -500 }}
+                  animate={{
+                    opacity: isActive ? 1 : (isMobile ? 0.5 : 0.7),
+                    scale: isActive ? 1 : (isMobile ? 0.85 : 0.9),
+                    x: diff * (isMobile ? 70 : 160), // Increased mobile spread for better tap targets
+                    z: isActive ? 0 : -Math.abs(diff) * (isMobile ? 150 : 300),
+                    rotateY: diff * (isMobile ? -25 : -35),
+                    y: Math.abs(diff) * (isMobile ? 8 : 15),
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  exit={{ opacity: 0, scale: 0.5, z: -1000 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 20,
+                    mass: 1
+                  }}
+                  onClick={() => {
+                    if (isActive) {
+                      setSelectedCert(cert);
+                    } else {
+                      setActiveIndex(i);
+                    }
+                  }}
+                  className={`absolute cursor-pointer glass-card p-1 overflow-hidden border-2 transition-colors bg-zinc-900 group/cert touch-manipulation ${
+                    isActive ? 'border-brand-primary shadow-[0_0_50px_rgba(99,102,241,0.5)]' : 'border-brand-primary/10'
+                  }`}
+                  style={{
+                    width: isMobile ? '240px' : '400px',
+                    aspectRatio: '1.4/1',
+                    zIndex: 100 - Math.abs(diff),
+                    transformStyle: 'preserve-3d',
+                  }}
+                >
+                  <div className="w-full h-full relative overflow-hidden rounded-lg">
+                    <img 
+                      src={cert.imageUrl} 
+                      alt="Certificate" 
+                      className={`w-full h-full object-cover transition-transform duration-1000 ${isActive ? 'scale-110' : 'scale-100'}`}
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${cert.id}/800/600`;
+                      }}
+                    />
+                    
+                    {/* Active Overlay */}
+                    <AnimatePresence>
+                      {isActive && (
+                        <motion.div 
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="absolute inset-0 bg-gradient-to-t from-brand-primary/60 via-transparent to-transparent flex items-end p-4 md:p-6"
+                        >
+                          <div className="flex items-center gap-3 text-white">
+                            <div className="bg-white p-1 md:p-1.5 rounded-full shadow-lg">
+                              <ShieldCheck size={16} className="text-brand-primary" />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[8px] md:text-[10px] font-mono uppercase tracking-[0.3em] opacity-80">Official Payout</span>
+                              <span className="text-xs md:text-sm font-bold uppercase tracking-widest">Verified Achievement</span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Status Badge */}
+                    <div className={`absolute top-3 right-3 md:top-4 md:right-4 p-2 md:p-2.5 rounded-full border shadow-2xl transition-all duration-500 ${
+                      isActive ? 'bg-brand-primary border-white text-white scale-110' : 'bg-black/40 border-white/10 text-white/40'
+                    }`}>
+                      <Zap size={14} className={isActive ? 'animate-pulse' : ''} />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+        
+        {/* Interaction Hint */}
+        <div className="mt-4 md:mt-6 text-[9px] text-white/20 font-mono uppercase tracking-[0.4em] animate-pulse">
+          {isMobile ? 'Tap to switch or view' : 'Click to inspect achievement'}
+        </div>
       </div>
 
       {/* Lightbox Modal */}
@@ -821,8 +950,16 @@ const Results = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
         <div className="mb-24">
-          <h3 className="text-2xl font-bold mb-12 text-center uppercase tracking-widest text-white/60">Student Success & Payout Certificates</h3>
-          <CertificateGallery />
+          <h3 className="text-2xl font-bold mb-4 text-center uppercase tracking-widest text-white/60">Student Success & Payout Certificates</h3>
+          <p className="text-center text-white/40 text-sm mb-8">Browse through our elite collection of verified payout achievements.</p>
+          
+          {/* Row 1 */}
+          <CertificateGallery items={CERTIFICATES.slice(0, Math.ceil(CERTIFICATES.length / 2))} interval={3000} />
+          
+          {/* Row 2 */}
+          <div className="mt-4 md:mt-6">
+            <CertificateGallery items={CERTIFICATES.slice(Math.ceil(CERTIFICATES.length / 2))} interval={3000} />
+          </div>
         </div>
 
         <div className="mb-16">
@@ -1022,7 +1159,6 @@ const ApplicationForm = () => {
                   onChange={(e) => updateField(questions[step].id, e.target.value)}
                   placeholder={questions[step].placeholder}
                   className="w-full bg-transparent border-b-2 border-brand-primary/30 py-4 text-xl outline-none focus:border-brand-primary transition-colors text-white"
-                  autoFocus
                   onKeyDown={(e) => e.key === 'Enter' && handleNext()}
                 />
               ) : questions[step].type === 'choice' ? (
@@ -1067,7 +1203,6 @@ const ApplicationForm = () => {
                         value={formData.otherLocation}
                         onChange={(e) => updateField('otherLocation', e.target.value)}
                         className="w-full bg-transparent border-b-2 border-brand-primary/30 py-2 text-xl outline-none focus:border-brand-primary transition-colors text-white"
-                        autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && handleNext()}
                       />
                     </motion.div>
@@ -1082,7 +1217,6 @@ const ApplicationForm = () => {
                         value={formData.tradingDuration}
                         onChange={(e) => updateField('tradingDuration', e.target.value)}
                         className="w-full bg-transparent border-b-2 border-brand-primary/30 py-2 text-xl outline-none focus:border-brand-primary transition-colors text-white"
-                        autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && handleNext()}
                       />
                     </motion.div>
@@ -1118,7 +1252,6 @@ const ApplicationForm = () => {
                         value={formData.mentorName}
                         onChange={(e) => updateField('mentorName', e.target.value)}
                         className="w-full bg-transparent border-b-2 border-brand-primary/30 py-2 text-xl outline-none focus:border-brand-primary transition-colors text-white"
-                        autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && handleNext()}
                       />
                     </motion.div>
